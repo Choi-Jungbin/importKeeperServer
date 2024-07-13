@@ -1,20 +1,20 @@
 package com.example.importkeeperserver.corporation;
 
+import com.example.importkeeperserver.core.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/corp")
 public class CorporationController {
+    private final CorporationService corporationService;
 
     @PostMapping
-    public ResponseEntity<?> createCorporation(){
-        return ResponseEntity.ok(null);
+    public ResponseEntity<ApiUtils.ApiResult> createCorporation(@RequestBody CorpCreateRequestDTO requestDTO){
+        corporationService.creatCorporation(requestDTO);
+        return ResponseEntity.ok(ApiUtils.success(null, "success"));
     }
 
     @GetMapping
