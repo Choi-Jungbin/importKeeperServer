@@ -26,6 +26,12 @@ public class Corporation {
     private Country country;
 
     @Column
+    private int reviewCount;
+
+    @Column
+    private int totalRating;
+
+    @Column
     private int reportCount;
 
     @Builder
@@ -34,7 +40,14 @@ public class Corporation {
         this.name = name;
         this.item = item;
         this.country = country;
+        this.reviewCount = 0;
+        this.totalRating = 0;
         this.reportCount = 0;
+    }
+
+    public void updateTotalRating(int rating){
+        this.reviewCount += 1;
+        this.totalRating += rating;
     }
 
     void updateReport(){
