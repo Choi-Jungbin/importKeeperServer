@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 public class Corporation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @Column(nullable = false)
     private String name;
@@ -30,7 +29,8 @@ public class Corporation {
     private int reportCount;
 
     @Builder
-    public Corporation(String name, Item item, Country country){
+    public Corporation(String id, String name, Item item, Country country){
+        this.id = id;
         this.name = name;
         this.item = item;
         this.country = country;
