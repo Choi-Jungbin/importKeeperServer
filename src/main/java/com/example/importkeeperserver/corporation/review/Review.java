@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Review {
 
     @Id
-    private Long id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "corp_id")
@@ -26,7 +26,7 @@ public class Review {
     private String review;
 
     @Builder
-    public Review(Long id, Corporation corporation, int rating, String review){
+    public Review(String id, Corporation corporation, int rating, String review){
         this.id = id;
         this.corporation = corporation;
         this.rating = rating;
