@@ -43,7 +43,7 @@ public class CorporationService {
 
     public Corporation findCorporation(Long id){
         Corporation corporation = corporationJPARepository.findById(id)
-                .orElseThrow(new NotFoundException());
+                .orElseThrow(() -> new NotFoundException("해당 기업이 없습니다."));
         return corporation;
     }
 }
