@@ -1,5 +1,6 @@
 package com.example.importkeeperserver.corporation;
 
+import com.example.importkeeperserver.core.error.NotFoundException;
 import com.example.importkeeperserver.corporation.review.Review;
 import com.example.importkeeperserver.corporation.review.ReviewDTO;
 import com.example.importkeeperserver.corporation.review.ReviewJPARepository;
@@ -42,7 +43,7 @@ public class CorporationService {
 
     public Corporation findCorporation(Long id){
         Corporation corporation = corporationJPARepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(new NotFoundException());
         return corporation;
     }
 }
