@@ -1,4 +1,4 @@
-package com.example.importkeeperserver.regulation;
+package com.example.importkeeperserver.regulation.regulation;
 
 import lombok.Getter;
 

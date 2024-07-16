@@ -1,5 +1,11 @@
 package com.example.importkeeperserver.regulation;
 
+import com.example.importkeeperserver.regulation.item.ItemKeyword;
+import com.example.importkeeperserver.regulation.item.ItemKeywordJPARepository;
+import com.example.importkeeperserver.regulation.item.ItemKeywordResponseDTO;
+import com.example.importkeeperserver.regulation.regulation.ImportRegulation;
+import com.example.importkeeperserver.regulation.regulation.ImportRegulationJPARepository;
+import com.example.importkeeperserver.regulation.regulation.ImportRegulationResponseDTO;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import jakarta.annotation.PostConstruct;
@@ -16,7 +22,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

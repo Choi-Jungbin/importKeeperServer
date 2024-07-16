@@ -1,4 +1,4 @@
-package com.example.importkeeperserver.regulation;
+package com.example.importkeeperserver.regulation.item;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
