@@ -7,12 +7,16 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +37,34 @@ public class RegulationService {
     }
 
     @Transactional
+    public ItemKeywordResponseDTO getAutoCompleteKeyword(String prefix){
+        List<ItemKeyword> itemKeywords = itemKeywordJPARepository.findByAutoCompleteKeywordStartingWith(prefix);
+
+        return new ItemKeywordResponseDTO(itemKeywords);
+    }
+
+    @Transactional
+    public ItemKeywordResponseDTO findItemKeyword(Pageable pageable){
+        Page<ItemKeyword> itemKeywords = itemKeywordJPARepository.findAll(pageable);
+
+        return new ItemKeywordResponseDTO(itemKeywords.getContent());
+    }
+
+    @Transactional
+    public ImportRegulationResponseDTO findRegulationByCountry(String country){
+        List<ImportRegulation> importRegulations = importRegulationJPARepository.findByCountryContaining(country);
+
+        return new ImportRegulationResponseDTO(importRegulations);
+    }
+
+    @Transactional
+    public ImportRegulationResponseDTO findRegulationByItem(String item){
+        List<ImportRegulation> importRegulations = importRegulationJPARepository.findByItemContaining(item);
+
+        return new ImportRegulationResponseDTO(importRegulations);
+    }
+
+    @Transactional
     public void loadItemKeywordCSV() throws IOException, CsvValidationException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(
@@ -44,18 +76,22 @@ public class RegulationService {
         FileInputStream fis = new FileInputStream(file);
         InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
         CSVReader csvReader = new CSVReader(isr);
+        // 한 줄 넘기기
+        csvReader.readNext();
 
         String[] nextRecord;
         while((nextRecord = csvReader.readNext()) != null){
             // 규제국
-            String keywordNum = nextRecord[1];
+            String keywordNum = nextRecord[0];
             String item = nextRecord[1];
+            String autoCompleteKeyword = nextRecord[7];
 
             ItemKeyword itemKeyword = itemKeywordJPARepository.findById(keywordNum)
                     .orElseGet(() -> {
                         ItemKeyword newItemKeyword = ItemKeyword.builder()
                                 .keywordNum(keywordNum)
                                 .item(item)
+                                .autoCompleteKeyword(autoCompleteKeyword)
                                 .build();
                         return itemKeywordJPARepository.save(newItemKeyword);
                     });

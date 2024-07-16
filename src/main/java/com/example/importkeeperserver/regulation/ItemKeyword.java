@@ -19,9 +19,13 @@ public class ItemKeyword {
     @Column(nullable = false)
     private String item;
 
+    @Column
+    private String autoCompleteKeyword;
+
     @Builder
-    public ItemKeyword(String keywordNum, String item){
+    public ItemKeyword(String keywordNum, String item, String autoCompleteKeyword){
         this.keywordNum = keywordNum;
         this.item = item;
+        this.autoCompleteKeyword = autoCompleteKeyword;
     }
 }
