@@ -9,11 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -98,9 +101,26 @@ public class CorporationService {
         }
     }
 
-    public Corporation findCorporation(String id){
+    @Transactional
+    public CorporationDTO findCorporation(String id){
         Corporation corporation = corporationJPARepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 기업이 없습니다."));
-        return corporation;
+
+        return new CorporationDTO(corporation);
     }
+
+    @Transactional
+    public CorporationResponseDTO findMatchCorporations(String name){
+        List<Corporation> corporations = corporationJPARepository.findByNameContaining(name);
+        
+        return new CorporationResponseDTO(corporations);
+    }
+
+    @Transactional
+    public CorporationResponseDTO findALlCorporations(Pageable pageable){
+        Page<Corporation> corporations = corporationJPARepository.findAll(pageable);
+
+        return new CorporationResponseDTO(corporations.getContent());
+    }
+
 }
