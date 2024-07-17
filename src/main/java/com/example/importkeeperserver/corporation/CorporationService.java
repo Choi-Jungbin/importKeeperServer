@@ -112,7 +112,7 @@ public class CorporationService {
     @Transactional
     public CorporationResponseDTO findMatchCorporations(String name){
         List<Corporation> corporations = corporationJPARepository.findByNameContaining(name);
-        
+
         return new CorporationResponseDTO(corporations);
     }
 

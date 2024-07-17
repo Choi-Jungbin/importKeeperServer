@@ -57,6 +57,13 @@ public class RegulationService {
     }
 
     @Transactional
+    public ImportRegulationResponseDTO findAllRegulations(Pageable pageable){
+        Page<ImportRegulation> importRegulations = importRegulationJPARepository.findAll(pageable);
+
+        return new ImportRegulationResponseDTO(importRegulations.getContent());
+    }
+
+    @Transactional
     public ImportRegulationResponseDTO findRegulationByCountry(String country){
         List<ImportRegulation> importRegulations = importRegulationJPARepository.findByCountryContaining(country);
 

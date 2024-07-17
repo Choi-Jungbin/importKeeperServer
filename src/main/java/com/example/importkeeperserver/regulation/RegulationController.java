@@ -32,6 +32,13 @@ public class RegulationController {
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
 
+    @GetMapping
+    public ResponseEntity<ApiUtils.ApiResult> findAllRegulations(@PageableDefault(size = 10)Pageable pageable){
+        ImportRegulationResponseDTO responseDTO = regulationService.findAllRegulations(pageable);
+
+        return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
+    }
+
     @GetMapping("/country")
     public ResponseEntity<ApiUtils.ApiResult> findRegulationByCountry(@RequestParam String country){
         ImportRegulationResponseDTO responseDTO = regulationService.findRegulationByCountry(country);
