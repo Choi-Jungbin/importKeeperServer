@@ -11,15 +11,12 @@ public class CorpCreateRequestDTO {
     private String id;
     @NotEmpty
     private String name;
-    private Country country;
     private Map<String, ReviewDTO> reviews;
 
     public CorpCreateRequestDTO(String id, String name,
-                                Country country,
                                 Map<String, ReviewDTO> reviews){
         this.id = id;
         this.name = name;
-        this.country = country;
         this.reviews = reviews;
     }
 }

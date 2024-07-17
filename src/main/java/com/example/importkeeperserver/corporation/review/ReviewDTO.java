@@ -9,11 +9,11 @@ public class ReviewDTO {
     @NotEmpty
     private String id;
     private int rating;
-    private String review;
+    private String content;
 
-    public ReviewDTO(String id, int rating, String review){
+    public ReviewDTO(String id, int rating, String content){
         this.id = id;
         this.rating = rating;
-        this.review = review;
+        this.content = content;
     }
 }

@@ -32,7 +32,8 @@ public class RegulationService {
 
     // 서버 실행 시 바로 진행
     @PostConstruct
-    public void itemKeywordInit(){
+    @Transactional
+    public void regulationInit(){
         try {
             loadItemKeywordCSV();
             loadImportRegulation();

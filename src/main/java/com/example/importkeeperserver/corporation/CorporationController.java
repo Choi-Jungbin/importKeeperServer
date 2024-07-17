@@ -18,7 +18,7 @@ public class CorporationController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findCorporation(Long id){
+    public ResponseEntity<?> findCorporation(String id){
         return ResponseEntity.ok(null);
     }
 }
