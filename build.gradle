@@ -21,6 +21,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 ext {
@@ -43,6 +44,16 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+
+    // 파일 읽기
+    implementation 'com.opencsv:opencsv:5.5.2'
+    implementation 'org.apache.poi:poi-ooxml:5.2.2'
+    implementation 'org.json:json:20231013'
+    implementation 'com.googlecode.json-simple:json-simple:1.1'
+
+    // 데이터 분석
+    implementation 'com.github.shin285:KOMORAN:3.3.9'
 }
 
 dependencyManagement {

@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 public class Review {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "corp_id")
@@ -23,13 +24,12 @@ public class Review {
     private int rating;
 
     @Column(columnDefinition = "longtext")
-    private String review;
+    private String content;
 
     @Builder
-    public Review(String id, Corporation corporation, int rating, String review){
-        this.id = id;
+    public Review(Corporation corporation, int rating, String content){
         this.corporation = corporation;
         this.rating = rating;
-        this.review = review;
+        this.content = content;
     }
 }
