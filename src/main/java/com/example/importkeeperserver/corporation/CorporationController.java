@@ -20,15 +20,15 @@ public class CorporationController {
         return ResponseEntity.ok(ApiUtils.success(null, "success"));
     }
 
-    @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult> findCorporation(String id){
+    @GetMapping("/id")
+    public ResponseEntity<ApiUtils.ApiResult> findCorporation(@RequestParam String id){
         CorporationDTO responseDTO = corporationService.findCorporation(id);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
 
-    @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult> findMatchCorporations(String name){
+    @GetMapping("/name")
+    public ResponseEntity<ApiUtils.ApiResult> findMatchCorporations(@RequestParam String name){
         CorporationResponseDTO responseDTO = corporationService.findMatchCorporations(name);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));

@@ -14,7 +14,7 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "corp_id")
@@ -27,8 +27,7 @@ public class Review {
     private String content;
 
     @Builder
-    public Review(String id, Corporation corporation, int rating, String content){
-        this.id = id;
+    public Review(Corporation corporation, int rating, String content){
         this.corporation = corporation;
         this.rating = rating;
         this.content = content;

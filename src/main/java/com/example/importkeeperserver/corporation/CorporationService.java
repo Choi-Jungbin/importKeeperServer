@@ -45,19 +45,23 @@ public class CorporationService {
                     String storeId = (String) entry.getKey();
                     JSONObject store = (JSONObject) entry.getValue();
                     Corporation corporation = corporationJPARepository.findById(storeId)
-                            .orElseGet(() ->
-                                Corporation.builder()
+                            .orElseGet(() -> {
+                                Corporation newCorporation = Corporation.builder()
                                         .id(storeId)
                                         .name(store.get("store_name").toString())
                                         .category(Category.valueOf(category))
                                         .vatNum(store.get("vat_num").toString())
                                         .address(store.get("address").toString())
                                         .companyName(store.get("company_name").toString())
-                                        .build()
-                            );
+                                        .build();
+                                return corporationJPARepository.save(newCorporation);
+                            });
+
                     JSONArray jsonArray = (JSONArray) store.get("review");
                     for(Object object : jsonArray){
-                        int score = (int) ((JSONObject) object).get("score") / 20;
+                        JSONObject obj = (JSONObject) object;
+                        Long scoreLong = (Long) obj.get("score");
+                        int score = (int) (scoreLong / 20);
                         String content = (String) ((JSONObject) object).get("content");
 
                         corporation.updateTotalRating(score);
@@ -87,10 +91,14 @@ public class CorporationService {
 
         Map<String, ReviewDTO> reviews = requestDTO.getReviews();
 
+        if (reviews == null || reviews.isEmpty()) {
+            // reviews가 null이거나 비어있으면 메서드를 종료
+            return;
+        }
+
         for(String reviewId : reviews.keySet()){
             ReviewDTO reviewDTO = reviews.get(reviewId);
             Review review = Review.builder()
-                    .id(reviewId)
                     .corporation(corporation)
                     .rating(reviewDTO.getRating())
                     .content(reviewDTO.getContent())
