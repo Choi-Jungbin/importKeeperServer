@@ -43,10 +43,10 @@ public class RegulationService {
     }
 
     @Transactional
-    public ItemKeywordResponseDTO getAutoCompleteKeyword(String prefix){
-        List<ItemKeyword> itemKeywords = itemKeywordJPARepository.findByAutoCompleteKeywordStartingWith(prefix);
+    public ItemKeywordResponseDTO getAutoCompleteKeyword(String prefix, Pageable pageable){
+        Page<ItemKeyword> itemKeywords = itemKeywordJPARepository.findByAutoCompleteKeywordStartingWith(prefix, pageable);
 
-        return new ItemKeywordResponseDTO(itemKeywords);
+        return new ItemKeywordResponseDTO(itemKeywords.getContent());
     }
 
     @Transactional
@@ -64,17 +64,17 @@ public class RegulationService {
     }
 
     @Transactional
-    public ImportRegulationResponseDTO findRegulationByCountry(String country){
-        List<ImportRegulation> importRegulations = importRegulationJPARepository.findByCountryContainingIgnoreCase(country);
+    public ImportRegulationResponseDTO findRegulationByCountry(String country, Pageable pageable){
+        Page<ImportRegulation> importRegulations = importRegulationJPARepository.findByCountryContainingIgnoreCase(country, pageable);
 
-        return new ImportRegulationResponseDTO(importRegulations);
+        return new ImportRegulationResponseDTO(importRegulations.getContent());
     }
 
     @Transactional
-    public ImportRegulationResponseDTO findRegulationByItem(String item){
-        List<ImportRegulation> importRegulations = importRegulationJPARepository.findByItemContainingIgnoreCase(item);
+    public ImportRegulationResponseDTO findRegulationByItem(String item, Pageable pageable){
+        Page<ImportRegulation> importRegulations = importRegulationJPARepository.findByItemContainingIgnoreCase(item, pageable);
 
-        return new ImportRegulationResponseDTO(importRegulations);
+        return new ImportRegulationResponseDTO(importRegulations.getContent());
     }
 
     @Transactional

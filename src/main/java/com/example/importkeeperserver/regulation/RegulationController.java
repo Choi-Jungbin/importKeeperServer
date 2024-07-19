@@ -19,8 +19,8 @@ public class RegulationController {
     public final RegulationService regulationService;
 
     @GetMapping("/itemKeyword/auto")
-    public ResponseEntity<ApiUtils.ApiResult> autoComplete(@RequestParam String prefix){
-        ItemKeywordResponseDTO responseDTO = regulationService.getAutoCompleteKeyword(prefix);
+    public ResponseEntity<ApiUtils.ApiResult> autoComplete(@RequestParam String prefix, @PageableDefault(size = 10)Pageable pageable){
+        ItemKeywordResponseDTO responseDTO = regulationService.getAutoCompleteKeyword(prefix, pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
@@ -40,15 +40,15 @@ public class RegulationController {
     }
 
     @GetMapping("/country")
-    public ResponseEntity<ApiUtils.ApiResult> findRegulationByCountry(@RequestParam String country){
-        ImportRegulationResponseDTO responseDTO = regulationService.findRegulationByCountry(country);
+    public ResponseEntity<ApiUtils.ApiResult> findRegulationByCountry(@RequestParam String country, @PageableDefault(size = 10)Pageable pageable){
+        ImportRegulationResponseDTO responseDTO = regulationService.findRegulationByCountry(country, pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
 
     @GetMapping("/item")
-    public ResponseEntity<ApiUtils.ApiResult> findRegulationByItem(@RequestParam String item){
-        ImportRegulationResponseDTO responseDTO = regulationService.findRegulationByItem(item);
+    public ResponseEntity<ApiUtils.ApiResult> findRegulationByItem(@RequestParam String item, @PageableDefault(size = 10)Pageable pageable){
+        ImportRegulationResponseDTO responseDTO = regulationService.findRegulationByItem(item, pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }

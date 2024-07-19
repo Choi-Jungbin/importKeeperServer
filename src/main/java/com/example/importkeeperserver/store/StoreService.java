@@ -118,10 +118,10 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreResponseDTO findStoreByName(String name){
-        List<Store> stores = storeJPARepository.findByNameContainingIgnoreCase(name);
+    public StoreResponseDTO findStoreByName(String name, Pageable pageable){
+        Page<Store> stores = storeJPARepository.findByNameContainingIgnoreCase(name, pageable);
 
-        return new StoreResponseDTO(stores);
+        return new StoreResponseDTO(stores.getContent());
     }
 
     @Transactional
@@ -146,16 +146,16 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreResponseDTO findStoreByCategory(Category category){
-        List<Store> stores = storeJPARepository.findByCategory(category);
+    public StoreResponseDTO findStoreByCategory(Category category, Pageable pageable){
+        Page<Store> stores = storeJPARepository.findByCategory(category, pageable);
 
-        return new StoreResponseDTO(stores);
+        return new StoreResponseDTO(stores.getContent());
     }
 
     @Transactional
-    public StoreResponseDTO findStoreByCompany(String company){
-        List<Store> stores = storeJPARepository.findByCompanyNameContainingIgnoreCase(company);
+    public StoreResponseDTO findStoreByCompany(String company, Pageable pageable){
+        Page<Store> stores = storeJPARepository.findByCompanyNameContainingIgnoreCase(company, pageable);
 
-        return new StoreResponseDTO(stores);
+        return new StoreResponseDTO(stores.getContent());
     }
 }

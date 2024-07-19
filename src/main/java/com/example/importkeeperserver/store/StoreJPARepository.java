@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface StoreJPARepository extends JpaRepository<Store, String> {
-    List<Store> findByNameContainingIgnoreCase(String name);
+    Page<Store> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     Page<Store> findAll(Pageable pageable);
 
-    List<Store> findByCategory(Category category);
+    Page<Store> findByCategory(Category category, Pageable pageable);
 
-    List<Store> findByCompanyNameContainingIgnoreCase(String company);
+    Page<Store> findByCompanyNameContainingIgnoreCase(String company, Pageable pageable);
 }

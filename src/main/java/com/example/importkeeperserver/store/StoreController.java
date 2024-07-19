@@ -29,8 +29,8 @@ public class StoreController {
     }
 
     @GetMapping("/name")
-    public ResponseEntity<ApiUtils.ApiResult> findStoreByName(@RequestParam String name){
-        StoreResponseDTO responseDTO = storeService.findStoreByName(name);
+    public ResponseEntity<ApiUtils.ApiResult> findStoreByName(@RequestParam String name, @PageableDefault(size = 10)Pageable pageable){
+        StoreResponseDTO responseDTO = storeService.findStoreByName(name, pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
@@ -50,15 +50,15 @@ public class StoreController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<ApiUtils.ApiResult> findStoreByCategory(@RequestParam Category category){
-        StoreResponseDTO responseDTO = storeService.findStoreByCategory(category);
+    public ResponseEntity<ApiUtils.ApiResult> findStoreByCategory(@RequestParam Category category, @PageableDefault(size = 10)Pageable pageable){
+        StoreResponseDTO responseDTO = storeService.findStoreByCategory(category, pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
 
     @GetMapping("/company")
-    public ResponseEntity<ApiUtils.ApiResult> findStoreByCompany(@RequestParam String company){
-        StoreResponseDTO responseDTO = storeService.findStoreByCompany(company);
+    public ResponseEntity<ApiUtils.ApiResult> findStoreByCompany(@RequestParam String company, @PageableDefault(size = 10)Pageable pageable){
+        StoreResponseDTO responseDTO = storeService.findStoreByCompany(company, pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
