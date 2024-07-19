@@ -65,14 +65,14 @@ public class RegulationService {
 
     @Transactional
     public ImportRegulationResponseDTO findRegulationByCountry(String country){
-        List<ImportRegulation> importRegulations = importRegulationJPARepository.findByCountryContaining(country);
+        List<ImportRegulation> importRegulations = importRegulationJPARepository.findByCountryContainingIgnoreCase(country);
 
         return new ImportRegulationResponseDTO(importRegulations);
     }
 
     @Transactional
     public ImportRegulationResponseDTO findRegulationByItem(String item){
-        List<ImportRegulation> importRegulations = importRegulationJPARepository.findByItemContaining(item);
+        List<ImportRegulation> importRegulations = importRegulationJPARepository.findByItemContainingIgnoreCase(item);
 
         return new ImportRegulationResponseDTO(importRegulations);
     }

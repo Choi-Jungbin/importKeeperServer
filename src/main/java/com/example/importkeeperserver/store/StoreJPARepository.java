@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface StoreJPARepository extends JpaRepository<Store, String> {
-    List<Store> findByNameContaining(String name);
+    List<Store> findByNameContainingIgnoreCase(String name);
 
     Page<Store> findAll(Pageable pageable);
 

@@ -119,7 +119,7 @@ public class StoreService {
 
     @Transactional
     public StoreResponseDTO findStoreByName(String name){
-        List<Store> stores = storeJPARepository.findByNameContaining(name);
+        List<Store> stores = storeJPARepository.findByNameContainingIgnoreCase(name);
 
         return new StoreResponseDTO(stores);
     }
