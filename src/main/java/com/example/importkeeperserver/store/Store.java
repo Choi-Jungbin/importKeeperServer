@@ -1,4 +1,4 @@
-package com.example.importkeeperserver.corporation;
+package com.example.importkeeperserver.store;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "corporations")
+@Table(name = "stores")
 @Getter
 @NoArgsConstructor
-public class Corporation {
+public class Store {
 
     @Id
     private String id;
@@ -34,13 +34,13 @@ public class Corporation {
     private int reviewCount;
 
     @Column
-    private int totalRating;
+    private float rating;
 
     @Column
-    private int reportCount;
+    private int report;
 
     @Builder
-    public Corporation(String id, String name, Category category, String vatNum, String address, String companyName){
+    public Store(String id, String name, Category category, String vatNum, String address, String companyName){
         this.id = id;
         this.name = name;
         this.category = category;
@@ -48,16 +48,17 @@ public class Corporation {
         this.address = address;
         this.companyName = companyName;
         this.reviewCount = 0;
-        this.totalRating = 0;
-        this.reportCount = 0;
+        this.rating = 0;
+        this.report = 0;
     }
 
-    public void updateTotalRating(int rating){
+    public void updateRating(int rating){
+        this.rating = (this.rating * reviewCount + rating) / (reviewCount + 1);
         this.reviewCount += 1;
-        this.totalRating += rating;
     }
 
-    void updateReport(){
-        this.reportCount += 1;
+    void updateReport(int rating){
+        this.report += 1;
+        updateRating(rating);
     }
 }

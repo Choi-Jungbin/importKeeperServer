@@ -1,4 +1,4 @@
-package com.example.importkeeperserver.corporation;
+package com.example.importkeeperserver.store;
 
 import lombok.Getter;
 

@@ -1,9 +1,9 @@
-package com.example.importkeeperserver.corporation;
+package com.example.importkeeperserver.store;
 
 import com.example.importkeeperserver.core.error.NotFoundException;
-import com.example.importkeeperserver.corporation.review.Review;
-import com.example.importkeeperserver.corporation.review.ReviewDTO;
-import com.example.importkeeperserver.corporation.review.ReviewJPARepository;
+import com.example.importkeeperserver.store.review.Review;
+import com.example.importkeeperserver.store.review.ReviewDTO;
+import com.example.importkeeperserver.store.review.ReviewJPARepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
@@ -21,13 +21,13 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class CorporationService {
-    private final CorporationJPARepository corporationJPARepository;
+public class StoreService {
+    private final StoreJPARepository storeJPARepository;
     private final ReviewJPARepository reviewJPARepository;
 
     @PostConstruct
     @Transactional
-    public void corporationInit(){
+    public void storeInit(){
         try {
             String reviewPath = "src/main/resources/aliexpress_review/";
             File dir = new File(reviewPath);
@@ -43,37 +43,37 @@ public class CorporationService {
                 while(stores.hasNext()){
                     Map.Entry entry = (Map.Entry) stores.next();
                     String storeId = (String) entry.getKey();
-                    JSONObject store = (JSONObject) entry.getValue();
-                    Corporation corporation = corporationJPARepository.findById(storeId)
+                    JSONObject jsonStore = (JSONObject) entry.getValue();
+                    Store store = storeJPARepository.findById(storeId)
                             .orElseGet(() -> {
-                                Corporation newCorporation = Corporation.builder()
+                                Store newStore = Store.builder()
                                         .id(storeId)
-                                        .name(store.get("store_name").toString())
+                                        .name(jsonStore.get("store_name").toString())
                                         .category(Category.valueOf(category))
-                                        .vatNum(store.get("vat_num").toString())
-                                        .address(store.get("address").toString())
-                                        .companyName(store.get("company_name").toString())
+                                        .vatNum(jsonStore.get("vat_num").toString())
+                                        .address(jsonStore.get("address").toString())
+                                        .companyName(jsonStore.get("company_name").toString())
                                         .build();
-                                return corporationJPARepository.save(newCorporation);
+                                return storeJPARepository.save(newStore);
                             });
 
-                    JSONArray jsonArray = (JSONArray) store.get("review");
+                    JSONArray jsonArray = (JSONArray) jsonStore.get("review");
                     for(Object object : jsonArray){
                         JSONObject obj = (JSONObject) object;
                         Long scoreLong = (Long) obj.get("score");
                         int score = (int) (scoreLong / 20);
                         String content = (String) ((JSONObject) object).get("content");
 
-                        corporation.updateTotalRating(score);
+                        store.updateRating(score);
                         Review review = Review.builder()
-                                .corporation(corporation)
+                                .store(store)
                                 .rating(score)
                                 .content(content)
                                 .build();
 
                         reviewJPARepository.save(review);
                     }
-                    corporationJPARepository.save(corporation);
+                    storeJPARepository.save(store);
                 }
             }
         } catch (Exception e){
@@ -82,12 +82,12 @@ public class CorporationService {
     }
 
     @Transactional
-    public void creatCorporation(CorpCreateRequestDTO requestDTO){
-        Corporation corporation = Corporation.builder()
+    public void creatStore(StoreCreateRequestDTO requestDTO){
+        Store store = Store.builder()
                 .id(requestDTO.getId())
                 .name(requestDTO.getName())
                 .build();
-        corporationJPARepository.save(corporation);
+        storeJPARepository.save(store);
 
         Map<String, ReviewDTO> reviews = requestDTO.getReviews();
 
@@ -99,36 +99,63 @@ public class CorporationService {
         for(String reviewId : reviews.keySet()){
             ReviewDTO reviewDTO = reviews.get(reviewId);
             Review review = Review.builder()
-                    .corporation(corporation)
+                    .store(store)
                     .rating(reviewDTO.getRating())
                     .content(reviewDTO.getContent())
                     .build();
             reviewJPARepository.save(review);
 
-            corporation.updateTotalRating(review.getRating());
+            store.updateRating(review.getRating());
         }
     }
 
     @Transactional
-    public CorporationDTO findCorporation(String id){
-        Corporation corporation = corporationJPARepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 기업이 없습니다."));
+    public StoreDTO findStore(String id){
+        Store store = storeJPARepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("해당 스토어가 없습니다."));
 
-        return new CorporationDTO(corporation);
+        return new StoreDTO(store);
     }
 
     @Transactional
-    public CorporationResponseDTO findMatchCorporations(String name){
-        List<Corporation> corporations = corporationJPARepository.findByNameContaining(name);
+    public StoreResponseDTO findStoreByName(String name, Pageable pageable){
+        Page<Store> stores = storeJPARepository.findByNameContainingIgnoreCase(name, pageable);
 
-        return new CorporationResponseDTO(corporations);
+        return new StoreResponseDTO(stores.getContent());
     }
 
     @Transactional
-    public CorporationResponseDTO findALlCorporations(Pageable pageable){
-        Page<Corporation> corporations = corporationJPARepository.findAll(pageable);
+    public StoreResponseDTO findAllStores(Pageable pageable){
+        Page<Store> corporations = storeJPARepository.findAll(pageable);
 
-        return new CorporationResponseDTO(corporations.getContent());
+        return new StoreResponseDTO(corporations.getContent());
     }
 
+    @Transactional
+    public void createReport(ReviewDTO report){
+        Store store = storeJPARepository.findById(report.getStore())
+                .orElseThrow(() -> new NotFoundException("해당 스토어가 없습니다."));
+        store.updateReport(report.getRating());
+        storeJPARepository.save(store);
+        Review review = Review.builder()
+                .store(store)
+                .rating(report.getRating())
+                .content(report.getContent())
+                .build();
+        reviewJPARepository.save(review);
+    }
+
+    @Transactional
+    public StoreResponseDTO findStoreByCategory(Category category, Pageable pageable){
+        Page<Store> stores = storeJPARepository.findByCategory(category, pageable);
+
+        return new StoreResponseDTO(stores.getContent());
+    }
+
+    @Transactional
+    public StoreResponseDTO findStoreByCompany(String company, Pageable pageable){
+        Page<Store> stores = storeJPARepository.findByCompanyNameContainingIgnoreCase(company, pageable);
+
+        return new StoreResponseDTO(stores.getContent());
+    }
 }
