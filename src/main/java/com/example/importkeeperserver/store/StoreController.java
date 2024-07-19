@@ -55,4 +55,11 @@ public class StoreController {
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
+
+    @GetMapping("/company")
+    public ResponseEntity<ApiUtils.ApiResult> findStoreByCompany(@RequestParam String company){
+        StoreResponseDTO responseDTO = storeService.findStoreByCompany(company);
+
+        return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
+    }
 }

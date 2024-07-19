@@ -12,4 +12,6 @@ public interface StoreJPARepository extends JpaRepository<Store, String> {
     Page<Store> findAll(Pageable pageable);
 
     List<Store> findByCategory(Category category);
+
+    List<Store> findByCompanyNameContainingIgnoreCase(String company);
 }

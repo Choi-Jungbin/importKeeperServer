@@ -152,4 +152,10 @@ public class StoreService {
         return new StoreResponseDTO(stores);
     }
 
+    @Transactional
+    public StoreResponseDTO findStoreByCompany(String company){
+        List<Store> stores = storeJPARepository.findByCompanyNameContainingIgnoreCase(company);
+
+        return new StoreResponseDTO(stores);
+    }
 }
