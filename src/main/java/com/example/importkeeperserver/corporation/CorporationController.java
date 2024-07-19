@@ -1,6 +1,7 @@
 package com.example.importkeeperserver.corporation;
 
 import com.example.importkeeperserver.core.utils.ApiUtils;
+import com.example.importkeeperserver.corporation.review.ReviewDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -39,5 +40,12 @@ public class CorporationController {
         CorporationResponseDTO responseDTO = corporationService.findALlCorporations(pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
+    }
+
+    @PostMapping("/report")
+    public ResponseEntity<ApiUtils.ApiResult> createReport(@RequestBody ReviewDTO requestDTO){
+        corporationService.createReport(requestDTO);
+
+        return ResponseEntity.ok(ApiUtils.success(null, "success"));
     }
 }

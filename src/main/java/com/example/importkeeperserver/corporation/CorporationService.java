@@ -112,7 +112,7 @@ public class CorporationService {
     @Transactional
     public CorporationDTO findCorporation(String id){
         Corporation corporation = corporationJPARepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("해당 기업이 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 스토어가 없습니다."));
 
         return new CorporationDTO(corporation);
     }
@@ -131,4 +131,16 @@ public class CorporationService {
         return new CorporationResponseDTO(corporations.getContent());
     }
 
+    @Transactional
+    public void createReport(ReviewDTO report){
+        Corporation corporation = corporationJPARepository.findById(report.getCorporation())
+                .orElseThrow(() -> new NotFoundException("해당 기업이 없습니다."));
+        corporation.updateReport(report.getRating());
+        Review review = Review.builder()
+                .corporation(corporation)
+                .rating(report.getRating())
+                .content(report.getContent())
+                .build();
+        reviewJPARepository.save(review);
+    }
 }

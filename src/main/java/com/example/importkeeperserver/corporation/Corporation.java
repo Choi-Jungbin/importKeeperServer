@@ -34,7 +34,7 @@ public class Corporation {
     private int reviewCount;
 
     @Column
-    private int totalRating;
+    private float rating;
 
     @Column
     private int reportCount;
@@ -48,16 +48,17 @@ public class Corporation {
         this.address = address;
         this.companyName = companyName;
         this.reviewCount = 0;
-        this.totalRating = 0;
+        this.rating = 0;
         this.reportCount = 0;
     }
 
     public void updateTotalRating(int rating){
+        this.rating = (this.rating * reviewCount + rating) / (reviewCount + 1);
         this.reviewCount += 1;
-        this.totalRating += rating;
     }
 
-    void updateReport(){
+    void updateReport(int rating){
         this.reportCount += 1;
+        updateTotalRating(rating);
     }
 }

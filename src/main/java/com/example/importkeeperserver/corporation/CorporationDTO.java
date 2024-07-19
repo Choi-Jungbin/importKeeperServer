@@ -10,7 +10,7 @@ public class CorporationDTO {
     private String vatNum;
     private String address;
     private String companyName;
-    private float rating;
+    private String rating;
 
     public CorporationDTO(Corporation corporation){
         this.id = corporation.getId();
@@ -19,6 +19,6 @@ public class CorporationDTO {
         this.vatNum = corporation.getVatNum();
         this.address = corporation.getAddress();
         this.companyName = corporation.getCompanyName();
-        this.rating = (float) corporation.getTotalRating() / corporation.getReviewCount();
+        this.rating = String.format("%.2f", corporation.getRating());
     }
 }

@@ -7,12 +7,12 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 public class ReviewDTO {
     @NotEmpty
-    private String id;
+    private String corporation;
     private int rating;
     private String content;
 
-    public ReviewDTO(String id, int rating, String content){
-        this.id = id;
+    public ReviewDTO(String corporation, int rating, String content){
+        this.corporation = corporation;
         this.rating = rating;
         this.content = content;
     }
