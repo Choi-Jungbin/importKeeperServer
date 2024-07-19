@@ -48,4 +48,11 @@ public class CorporationController {
 
         return ResponseEntity.ok(ApiUtils.success(null, "success"));
     }
+
+    @GetMapping("/category")
+    public ResponseEntity<ApiUtils.ApiResult> findCorporationByCategory(@RequestParam Category category){
+        CorporationResponseDTO responseDTO = corporationService.findCorporationByCategory(category);
+
+        return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
+    }
 }

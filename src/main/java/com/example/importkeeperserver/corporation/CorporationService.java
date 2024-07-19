@@ -144,4 +144,11 @@ public class CorporationService {
                 .build();
         reviewJPARepository.save(review);
     }
+
+    @Transactional
+    public CorporationResponseDTO findCorporationByCategory(Category category){
+        List<Corporation> corporations = corporationJPARepository.findByCategory(category);
+
+        return new CorporationResponseDTO(corporations);
+    }
 }

@@ -10,4 +10,6 @@ public interface CorporationJPARepository extends JpaRepository<Corporation, Str
     List<Corporation> findByNameContaining(String name);
 
     Page<Corporation> findAll(Pageable pageable);
+
+    List<Corporation> findByCategory(Category category);
 }
