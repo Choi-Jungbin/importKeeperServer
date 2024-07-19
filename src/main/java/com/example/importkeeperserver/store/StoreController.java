@@ -15,29 +15,29 @@ public class StoreController {
     private final StoreService storeService;
 
     @PostMapping
-    public ResponseEntity<ApiUtils.ApiResult> createCorporation(@RequestBody StoreCreateRequestDTO requestDTO){
-        storeService.creatCorporation(requestDTO);
+    public ResponseEntity<ApiUtils.ApiResult> createStore(@RequestBody StoreCreateRequestDTO requestDTO){
+        storeService.creatStore(requestDTO);
 
         return ResponseEntity.ok(ApiUtils.success(null, "success"));
     }
 
     @GetMapping("/id")
-    public ResponseEntity<ApiUtils.ApiResult> findCorporation(@RequestParam String id){
-        StoreDTO responseDTO = storeService.findCorporation(id);
+    public ResponseEntity<ApiUtils.ApiResult> findStore(@RequestParam String id){
+        StoreDTO responseDTO = storeService.findStore(id);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
 
     @GetMapping("/name")
-    public ResponseEntity<ApiUtils.ApiResult> findMatchCorporations(@RequestParam String name){
-        StoreResponseDTO responseDTO = storeService.findMatchCorporations(name);
+    public ResponseEntity<ApiUtils.ApiResult> findStoreByName(@RequestParam String name){
+        StoreResponseDTO responseDTO = storeService.findStoreByName(name);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
 
     @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult> findAllCorporations(@PageableDefault(size = 10)Pageable pageable){
-        StoreResponseDTO responseDTO = storeService.findALlCorporations(pageable);
+    public ResponseEntity<ApiUtils.ApiResult> findAllStores(@PageableDefault(size = 10)Pageable pageable){
+        StoreResponseDTO responseDTO = storeService.findAllStores(pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
@@ -50,8 +50,8 @@ public class StoreController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<ApiUtils.ApiResult> findCorporationByCategory(@RequestParam Category category){
-        StoreResponseDTO responseDTO = storeService.findCorporationByCategory(category);
+    public ResponseEntity<ApiUtils.ApiResult> findStoreByCategory(@RequestParam Category category){
+        StoreResponseDTO responseDTO = storeService.findStoreByCategory(category);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }

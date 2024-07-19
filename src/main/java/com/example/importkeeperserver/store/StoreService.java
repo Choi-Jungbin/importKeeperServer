@@ -27,7 +27,7 @@ public class StoreService {
 
     @PostConstruct
     @Transactional
-    public void corporationInit(){
+    public void storeInit(){
         try {
             String reviewPath = "src/main/resources/aliexpress_review/";
             File dir = new File(reviewPath);
@@ -64,7 +64,7 @@ public class StoreService {
                         int score = (int) (scoreLong / 20);
                         String content = (String) ((JSONObject) object).get("content");
 
-                        store.updateTotalRating(score);
+                        store.updateRating(score);
                         Review review = Review.builder()
                                 .store(store)
                                 .rating(score)
@@ -82,7 +82,7 @@ public class StoreService {
     }
 
     @Transactional
-    public void creatCorporation(StoreCreateRequestDTO requestDTO){
+    public void creatStore(StoreCreateRequestDTO requestDTO){
         Store store = Store.builder()
                 .id(requestDTO.getId())
                 .name(requestDTO.getName())
@@ -105,12 +105,12 @@ public class StoreService {
                     .build();
             reviewJPARepository.save(review);
 
-            store.updateTotalRating(review.getRating());
+            store.updateRating(review.getRating());
         }
     }
 
     @Transactional
-    public StoreDTO findCorporation(String id){
+    public StoreDTO findStore(String id){
         Store store = storeJPARepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("해당 스토어가 없습니다."));
 
@@ -118,14 +118,14 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreResponseDTO findMatchCorporations(String name){
+    public StoreResponseDTO findStoreByName(String name){
         List<Store> stores = storeJPARepository.findByNameContaining(name);
 
         return new StoreResponseDTO(stores);
     }
 
     @Transactional
-    public StoreResponseDTO findALlCorporations(Pageable pageable){
+    public StoreResponseDTO findAllStores(Pageable pageable){
         Page<Store> corporations = storeJPARepository.findAll(pageable);
 
         return new StoreResponseDTO(corporations.getContent());
@@ -134,7 +134,7 @@ public class StoreService {
     @Transactional
     public void createReport(ReviewDTO report){
         Store store = storeJPARepository.findById(report.getStore())
-                .orElseThrow(() -> new NotFoundException("해당 기업이 없습니다."));
+                .orElseThrow(() -> new NotFoundException("해당 스토어가 없습니다."));
         store.updateReport(report.getRating());
         storeJPARepository.save(store);
         Review review = Review.builder()
@@ -146,9 +146,10 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreResponseDTO findCorporationByCategory(Category category){
+    public StoreResponseDTO findStoreByCategory(Category category){
         List<Store> stores = storeJPARepository.findByCategory(category);
 
         return new StoreResponseDTO(stores);
     }
+
 }

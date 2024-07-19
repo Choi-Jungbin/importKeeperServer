@@ -52,13 +52,13 @@ public class Store {
         this.report = 0;
     }
 
-    public void updateTotalRating(int rating){
+    public void updateRating(int rating){
         this.rating = (this.rating * reviewCount + rating) / (reviewCount + 1);
         this.reviewCount += 1;
     }
 
     void updateReport(int rating){
         this.report += 1;
-        updateTotalRating(rating);
+        updateRating(rating);
     }
 }
