@@ -1,4 +1,4 @@
-package com.example.importkeeperserver.corporation;
+package com.example.importkeeperserver.store;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "corporations")
+@Table(name = "stores")
 @Getter
 @NoArgsConstructor
-public class Corporation {
+public class Store {
 
     @Id
     private String id;
@@ -40,7 +40,7 @@ public class Corporation {
     private int report;
 
     @Builder
-    public Corporation(String id, String name, Category category, String vatNum, String address, String companyName){
+    public Store(String id, String name, Category category, String vatNum, String address, String companyName){
         this.id = id;
         this.name = name;
         this.category = category;

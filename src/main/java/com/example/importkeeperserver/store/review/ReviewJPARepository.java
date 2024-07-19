@@ -1,4 +1,4 @@
-package com.example.importkeeperserver.corporation.review;
+package com.example.importkeeperserver.store.review;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

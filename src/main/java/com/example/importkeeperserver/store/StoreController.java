@@ -1,7 +1,7 @@
-package com.example.importkeeperserver.corporation;
+package com.example.importkeeperserver.store;
 
 import com.example.importkeeperserver.core.utils.ApiUtils;
-import com.example.importkeeperserver.corporation.review.ReviewDTO;
+import com.example.importkeeperserver.store.review.ReviewDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -10,48 +10,48 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/corp")
-public class CorporationController {
-    private final CorporationService corporationService;
+@RequestMapping("/store")
+public class StoreController {
+    private final StoreService storeService;
 
     @PostMapping
-    public ResponseEntity<ApiUtils.ApiResult> createCorporation(@RequestBody CorpCreateRequestDTO requestDTO){
-        corporationService.creatCorporation(requestDTO);
+    public ResponseEntity<ApiUtils.ApiResult> createCorporation(@RequestBody StoreCreateRequestDTO requestDTO){
+        storeService.creatCorporation(requestDTO);
 
         return ResponseEntity.ok(ApiUtils.success(null, "success"));
     }
 
     @GetMapping("/id")
     public ResponseEntity<ApiUtils.ApiResult> findCorporation(@RequestParam String id){
-        CorporationDTO responseDTO = corporationService.findCorporation(id);
+        StoreDTO responseDTO = storeService.findCorporation(id);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
 
     @GetMapping("/name")
     public ResponseEntity<ApiUtils.ApiResult> findMatchCorporations(@RequestParam String name){
-        CorporationResponseDTO responseDTO = corporationService.findMatchCorporations(name);
+        StoreResponseDTO responseDTO = storeService.findMatchCorporations(name);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
 
     @GetMapping
     public ResponseEntity<ApiUtils.ApiResult> findAllCorporations(@PageableDefault(size = 10)Pageable pageable){
-        CorporationResponseDTO responseDTO = corporationService.findALlCorporations(pageable);
+        StoreResponseDTO responseDTO = storeService.findALlCorporations(pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }
 
     @PostMapping("/report")
     public ResponseEntity<ApiUtils.ApiResult> createReport(@RequestBody ReviewDTO requestDTO){
-        corporationService.createReport(requestDTO);
+        storeService.createReport(requestDTO);
 
         return ResponseEntity.ok(ApiUtils.success(null, "success"));
     }
 
     @GetMapping("/category")
     public ResponseEntity<ApiUtils.ApiResult> findCorporationByCategory(@RequestParam Category category){
-        CorporationResponseDTO responseDTO = corporationService.findCorporationByCategory(category);
+        StoreResponseDTO responseDTO = storeService.findCorporationByCategory(category);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }

@@ -1,6 +1,6 @@
-package com.example.importkeeperserver.corporation.review;
+package com.example.importkeeperserver.store.review;
 
-import com.example.importkeeperserver.corporation.Corporation;
+import com.example.importkeeperserver.store.Store;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "corp_id")
-    private Corporation corporation;
+    private Store store;
 
     @Column(nullable = false)
     private int rating;
@@ -27,8 +27,8 @@ public class Review {
     private String content;
 
     @Builder
-    public Review(Corporation corporation, int rating, String content){
-        this.corporation = corporation;
+    public Review(Store store, int rating, String content){
+        this.store = store;
         this.rating = rating;
         this.content = content;
     }
