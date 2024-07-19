@@ -11,6 +11,7 @@ public class CorporationDTO {
     private String address;
     private String companyName;
     private String rating;
+    private int report;
 
     public CorporationDTO(Corporation corporation){
         this.id = corporation.getId();
@@ -20,5 +21,6 @@ public class CorporationDTO {
         this.address = corporation.getAddress();
         this.companyName = corporation.getCompanyName();
         this.rating = String.format("%.2f", corporation.getRating());
+        this.report = corporation.getReport();
     }
 }

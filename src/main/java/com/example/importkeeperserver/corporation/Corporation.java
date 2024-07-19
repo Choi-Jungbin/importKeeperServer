@@ -37,7 +37,7 @@ public class Corporation {
     private float rating;
 
     @Column
-    private int reportCount;
+    private int report;
 
     @Builder
     public Corporation(String id, String name, Category category, String vatNum, String address, String companyName){
@@ -49,7 +49,7 @@ public class Corporation {
         this.companyName = companyName;
         this.reviewCount = 0;
         this.rating = 0;
-        this.reportCount = 0;
+        this.report = 0;
     }
 
     public void updateTotalRating(int rating){
@@ -58,7 +58,7 @@ public class Corporation {
     }
 
     void updateReport(int rating){
-        this.reportCount += 1;
+        this.report += 1;
         updateTotalRating(rating);
     }
 }

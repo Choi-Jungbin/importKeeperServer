@@ -136,6 +136,7 @@ public class CorporationService {
         Corporation corporation = corporationJPARepository.findById(report.getCorporation())
                 .orElseThrow(() -> new NotFoundException("해당 기업이 없습니다."));
         corporation.updateReport(report.getRating());
+        corporationJPARepository.save(corporation);
         Review review = Review.builder()
                 .corporation(corporation)
                 .rating(report.getRating())
