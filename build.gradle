@@ -39,7 +39,6 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
-    runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -54,6 +53,9 @@ dependencies {
 
     // 데이터 분석
     implementation 'com.github.shin285:KOMORAN:3.3.9'
+
+    //MySQL
+    implementation 'mysql:mysql-connector-java:8.0.33'
 }
 
 dependencyManagement {
