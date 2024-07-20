@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -79,15 +80,8 @@ public class RegulationService {
 
     @Transactional
     public void loadItemKeywordCSV() throws IOException, CsvValidationException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(
-                // 파일 명이 한글이면 인식을 못함
-                Objects.requireNonNull(classLoader
-                        .getResource("import_regulation/Strategic_Materials_Item_Keyword_2019.csv"))
-                        .getFile()
-        );
-        FileInputStream fis = new FileInputStream(file);
-        InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+        ClassPathResource resource = new ClassPathResource("import_regulation/Strategic_Materials_Item_Keyword_2019.csv");
+        InputStreamReader isr = new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8);
         CSVReader csvReader = new CSVReader(isr);
         // 한 줄 넘기기
         csvReader.readNext();
@@ -114,8 +108,8 @@ public class RegulationService {
 
     @Transactional
     public void loadImportRegulation() throws IOException {
-        InputStream is = getClass().getResourceAsStream("/import_regulation/Import_Regulations_DB_2024-07-15.xlsx");
-        XSSFWorkbook wb = new XSSFWorkbook(is);
+        ClassPathResource resource = new ClassPathResource("import_regulation/Import_Regulations_DB_2024-07-15.xlsx");
+        XSSFWorkbook wb = new XSSFWorkbook(resource.getInputStream());
 
         // 첫번째 시트 불러오기
         Sheet sheet = wb.getSheetAt(0);

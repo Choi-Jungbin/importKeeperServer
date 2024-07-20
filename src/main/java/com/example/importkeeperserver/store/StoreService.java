@@ -9,12 +9,15 @@ import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,51 +32,58 @@ public class StoreService {
     @Transactional
     public void storeInit(){
         try {
-            String reviewPath = "src/main/resources/aliexpress_review/";
-            File dir = new File(reviewPath);
-            String[] filenames = dir.list();
+            // 리소스 패턴 리졸버 초기화
+            PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
+            // 패턴에 맞는 리소스 검색
+            Resource[] resources = resolver.getResources("classpath:aliexpress_review/*.json");
 
             JSONParser parser = new JSONParser();
-            for (String filename : filenames) {
-                String category = filename.split("\\.")[0];
-                Reader reader = new FileReader(reviewPath + filename);
-                JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
-                Iterator stores = ((JSONObject) jsonObject.get(category)).entrySet().iterator();
-                while(stores.hasNext()){
-                    Map.Entry entry = (Map.Entry) stores.next();
-                    String storeId = (String) entry.getKey();
-                    JSONObject jsonStore = (JSONObject) entry.getValue();
-                    Store store = storeJPARepository.findById(storeId)
-                            .orElseGet(() -> {
-                                Store newStore = Store.builder()
-                                        .id(storeId)
-                                        .name(jsonStore.get("store_name").toString())
-                                        .category(Category.valueOf(category))
-                                        .vatNum(jsonStore.get("vat_num").toString())
-                                        .address(jsonStore.get("address").toString())
-                                        .companyName(jsonStore.get("company_name").toString())
-                                        .build();
-                                return storeJPARepository.save(newStore);
-                            });
+            for (Resource resource : resources) {
+                String filename = resource.getFilename();
+                if (filename != null) {
+                    String category = filename.split("\\.")[0];
+                    InputStream inputStream = resource.getInputStream();
+                    InputStreamReader isr = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                    JSONObject jsonObject = (JSONObject) parser.parse(isr);
 
-                    JSONArray jsonArray = (JSONArray) jsonStore.get("review");
-                    for(Object object : jsonArray){
-                        JSONObject obj = (JSONObject) object;
-                        Long scoreLong = (Long) obj.get("score");
-                        int score = (int) (scoreLong / 20);
-                        String content = (String) ((JSONObject) object).get("content");
+                    Iterator stores = ((JSONObject) jsonObject.get(category)).entrySet().iterator();
+                    while (stores.hasNext()) {
+                        Map.Entry entry = (Map.Entry) stores.next();
+                        String storeId = (String) entry.getKey();
+                        JSONObject jsonStore = (JSONObject) entry.getValue();
+                        Store store = storeJPARepository.findById(storeId)
+                                .orElseGet(() -> {
+                                    Store newStore = Store.builder()
+                                            .id(storeId)
+                                            .name(jsonStore.get("store_name").toString())
+                                            .category(Category.valueOf(category))
+                                            .vatNum(jsonStore.get("vat_num").toString())
+                                            .address(jsonStore.get("address").toString())
+                                            .companyName(jsonStore.get("company_name").toString())
+                                            .build();
+                                    return storeJPARepository.save(newStore);
+                                });
 
-                        store.updateRating(score);
-                        Review review = Review.builder()
-                                .store(store)
-                                .rating(score)
-                                .content(content)
-                                .build();
+                        JSONArray jsonArray = (JSONArray) jsonStore.get("review");
+                        for (Object object : jsonArray) {
+                            JSONObject obj = (JSONObject) object;
+                            Long scoreLong = (Long) obj.get("score");
+                            int score = (int) (scoreLong / 20);
+                            String content = (String) ((JSONObject) object).get("content");
 
-                        reviewJPARepository.save(review);
+                            store.updateRating(score);
+                            Review review = Review.builder()
+                                    .store(store)
+                                    .rating(score)
+                                    .content(content)
+                                    .build();
+
+                            reviewJPARepository.save(review);
+                        }
+                        storeJPARepository.save(store);
                     }
-                    storeJPARepository.save(store);
                 }
             }
         } catch (Exception e){
