@@ -59,7 +59,17 @@ public class StoreService {
                             image = new ClassPathResource("store_image/default.png");
                         }
                         JSONObject jsonStore = (JSONObject) entry.getValue();
+                        String vatNum = jsonStore.get("vat_num").toString();
+                        vatNum = vatNum.isEmpty() ? "미기입" : vatNum;
+                        String address = jsonStore.get("address").toString();
+                        address = address.isEmpty() ? "미기입" : address;
+                        String company = jsonStore.get("company_name").toString();
+                        company = company.isEmpty() ? "미기입" : company;
+
                         ClassPathResource finalImage = image;
+                        String finalVatNum = vatNum;
+                        String finalAddress = address;
+                        String finalCompany = company;
                         Store store = storeJPARepository.findById(storeId)
                                 .orElseGet(() -> {
                                     Store newStore = Store.builder()
@@ -67,9 +77,9 @@ public class StoreService {
                                             .name(jsonStore.get("store_name").toString())
                                             .imagePath(finalImage.getPath())
                                             .category(Category.valueOf(category))
-                                            .vatNum(jsonStore.get("vat_num").toString())
-                                            .address(jsonStore.get("address").toString())
-                                            .companyName(jsonStore.get("company_name").toString())
+                                            .vatNum(finalVatNum)
+                                            .address(finalAddress)
+                                            .companyName(finalCompany)
                                             .build();
                                     return storeJPARepository.save(newStore);
                                 });
