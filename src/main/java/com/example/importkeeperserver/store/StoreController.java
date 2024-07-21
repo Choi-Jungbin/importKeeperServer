@@ -2,6 +2,7 @@ package com.example.importkeeperserver.store;
 
 import com.example.importkeeperserver.core.utils.ApiUtils;
 import com.example.importkeeperserver.store.review.ReviewDTO;
+import com.example.importkeeperserver.store.review.ReviewResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -59,6 +60,13 @@ public class StoreController {
     @GetMapping("/company")
     public ResponseEntity<ApiUtils.ApiResult> findStoreByCompany(@RequestParam String company, @PageableDefault(size = 10)Pageable pageable){
         StoreResponseDTO responseDTO = storeService.findStoreByCompany(company, pageable);
+
+        return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
+    }
+
+    @GetMapping("/review")
+    public ResponseEntity<ApiUtils.ApiResult> findReview(@RequestParam String store, @PageableDefault(size = 10)Pageable pageable){
+        ReviewResponseDTO responseDTO = storeService.findReview(store, pageable);
 
         return ResponseEntity.ok(ApiUtils.success(responseDTO, "success"));
     }

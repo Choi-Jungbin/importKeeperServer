@@ -18,6 +18,9 @@ public class Store {
     private String name;
 
     @Column
+    private String imagePath;
+
+    @Column
     @Enumerated(EnumType.STRING)
     private Category category;
 
@@ -40,9 +43,10 @@ public class Store {
     private int report;
 
     @Builder
-    public Store(String id, String name, Category category, String vatNum, String address, String companyName){
+    public Store(String id, String name, String imagePath, Category category, String vatNum, String address, String companyName){
         this.id = id;
         this.name = name;
+        this.imagePath = imagePath;
         this.category = category;
         this.vatNum = vatNum;
         this.address = address;

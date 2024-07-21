@@ -4,11 +4,13 @@ import com.example.importkeeperserver.core.error.NotFoundException;
 import com.example.importkeeperserver.store.review.Review;
 import com.example.importkeeperserver.store.review.ReviewDTO;
 import com.example.importkeeperserver.store.review.ReviewJPARepository;
+import com.example.importkeeperserver.store.review.ReviewResponseDTO;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,12 +54,18 @@ public class StoreService {
                     while (stores.hasNext()) {
                         Map.Entry entry = (Map.Entry) stores.next();
                         String storeId = (String) entry.getKey();
+                        ClassPathResource image = new ClassPathResource("store_image/"+storeId+".png");
+                        if(!image.exists()){
+                            image = new ClassPathResource("store_image/default.png");
+                        }
                         JSONObject jsonStore = (JSONObject) entry.getValue();
+                        ClassPathResource finalImage = image;
                         Store store = storeJPARepository.findById(storeId)
                                 .orElseGet(() -> {
                                     Store newStore = Store.builder()
                                             .id(storeId)
                                             .name(jsonStore.get("store_name").toString())
+                                            .imagePath(finalImage.getPath())
                                             .category(Category.valueOf(category))
                                             .vatNum(jsonStore.get("vat_num").toString())
                                             .address(jsonStore.get("address").toString())
@@ -167,5 +175,12 @@ public class StoreService {
         Page<Store> stores = storeJPARepository.findByCompanyNameContainingIgnoreCase(company, pageable);
 
         return new StoreResponseDTO(stores.getContent());
+    }
+
+    @Transactional
+    public ReviewResponseDTO findReview(String store, Pageable pageable){
+        Page<Review> reviews = reviewJPARepository.findByStoreId(store, pageable);
+
+        return new ReviewResponseDTO(reviews.getContent());
     }
 }

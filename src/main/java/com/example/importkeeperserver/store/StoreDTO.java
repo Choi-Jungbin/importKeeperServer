@@ -6,6 +6,8 @@ import lombok.Getter;
 public class StoreDTO {
     private String id;
     private String name;
+    private String imagePath;
+    private String imageBase64;
     private Category category;
     private String vatNum;
     private String address;
@@ -16,6 +18,7 @@ public class StoreDTO {
     public StoreDTO(Store store){
         this.id = store.getId();
         this.name = store.getName();
+        this.imagePath = store.getImagePath();
         this.category = store.getCategory();
         this.vatNum = store.getVatNum();
         this.address = store.getAddress();

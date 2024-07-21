@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+src/main/resources/aliexpress_review
+src/main/resources/import_regulation
+src/main/resources/store_image
